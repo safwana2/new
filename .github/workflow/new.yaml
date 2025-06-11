@@ -1,35 +1,19 @@
-name : trying to lar how to teste and deploy
-
-on:
-  push:
-    branches: [main]
-
-
-job:
+jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - name: Build application
+        run: echo "Building..."
 
-      - name:run an update
-        run: sudo apt update
-      
-      - name: create a file
-        run: echo "Hello, world!" > burhan.txt
-      - name: upload the file
-        uses: actions/upload-artifact@v3
-        with:
-          name: README.md
-          path: burhan.txt
-
-
-deploy:
-  publish:
+  test:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Download the artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: burhan.txt
+      - name: Run tests
+        run: echo "Testing..."
+
+  deploy:
+    needs: [build, test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy
