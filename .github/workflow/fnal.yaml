@@ -4,9 +4,7 @@ on:
   push:
     branches: ["main"]
 
-  paths-ignore:
-    - blank.yaml
-
+ 
 jobs:
   build:
     runs-on: ubuntu-latest
