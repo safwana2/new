@@ -5,6 +5,44 @@ on:
     branches: [main]
   
   paths:
+    - new/burhan.yaml
+    
+
+
+
+jobs:
+  stratergy:
+    matrix:
+      os: [ubuntu-latest, windows-latest, macos-latest]
+  build:
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: run an update
+        run: sudo apt update
+      
+      - name: install cmatrix
+        run: sudo apt install cmatrix
+
+
+
+
+
+
+
+ deploy:
+   needs: build
+   runs-on: ${{ matrix.os }}
+ 
+name: working on github actions
+
+on:
+  push:
+    branches: [main]
+  
+  paths:
     - dev/burhan.yaml
     
 
