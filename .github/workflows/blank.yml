@@ -18,18 +18,19 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Building the app..."
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: jjdjdh
+        run: echo "hello world"
 
   test:
+    runs-on: ubuntu-latest
     needs: build
-    runs-on: ubuntu-latest
     steps:
-      - run: echo "Testing the app..."
+      - name: Checkout
+        uses: actions/checkout@v3
 
-  deploy:
-    needs: [build, test]
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "Deploying the app..."
+      - name: run hello world
+        run: echo "hello world"
 
     
