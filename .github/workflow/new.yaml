@@ -1,50 +1,38 @@
-name: Demo Job Dependencies
+name: working on github actions
 
 on:
   push:
-    branches: [ main ]
-  workflow_dispatch:
+    branches: [main]
+  
+  paths:
+    - dev/burhan.yaml
+    
+
+
 
 jobs:
-  first_job:
-    runs-on: ubuntu-latest
+  stratergy:
+    matrix:
+      os: [ubuntu-latest, windows-latest, macos-latest]
+  build:
+    runs-on: ${{ matrix.os }}
     steps:
-      - name: Step 1
-        run: |
-          echo "Starting first_job at $(date)"
-          echo "This is the first job - ID: $GITHUB_JOB"
-          sleep 10  # Adding a delay to make the sequence more visible
-          echo "Completed first_job"
+      - name: Checkout
+        uses: actions/checkout@v3
 
-  second_job:
-    needs: first_job
-    runs-on: ubuntu-latest
-    steps:
-      - name: Step 1
-        run: |
-          echo "Starting second_job at $(date)"
-          echo "This job depends on first_job - ID: $GITHUB_JOB"
-          echo "Value of needs: ${{ toJSON(needs) }}"
-          sleep 5
-          echo "Completed second_job"
+      - name: run an update
+        run: sudo apt update
+      
+      - name: install cmatrix
+        run: sudo apt install cmatrix
 
-  third_job:
-    needs: [first_job, second_job]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Step 1
-        run: |
-          echo "Starting third_job at $(date)"
-          echo "This job depends on both first_job and second_job - ID: $GITHUB_JOB"
-          echo "Value of needs: ${{ toJSON(needs) }}"
-          echo "Completed third_job"
 
-  parallel_job:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Step 1
-        run: |
-          echo "Starting parallel_job at $(date)"
-          echo "This job runs in parallel with others as it has no 'needs' - ID: $GITHUB_JOB"
-          sleep 8
-          echo "Completed parallel_job"
+
+
+
+
+
+ deploy:
+   needs: build
+   runs-on: ${{ matrix.os }}
+ 
