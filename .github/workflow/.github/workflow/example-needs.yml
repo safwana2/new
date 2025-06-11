@@ -47,4 +47,4 @@ jobs:
           echo "Starting parallel_job at $(date)"
           echo "This job runs in parallel with others as it has no 'needs' - ID: $GITHUB_JOB"
           sleep 8
-          echo "Completed parallel_job"
+          echo "Completed parallel_job" 
