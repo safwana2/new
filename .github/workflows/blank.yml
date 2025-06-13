@@ -1,36 +1,32 @@
-# This is a basic workflow to help you get started with Actions
+name: HTML Project CI with SonarQube
 
-name: CI
-
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  build:
+  sonar:
+    name: SonarQube Analysis
     runs-on: ubuntu-latest
+
     steps:
-      - run: echo "Building the app..."
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-  test:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "Testing the app..."
+      - name: Install SonarScanner
+        run: |
+          wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip
+          unzip sonar-scanner-cli-5.0.1.3006-linux.zip
+          export PATH="$PWD/sonar-scanner-5.0.1.3006-linux/bin:$PATH"
 
-  deploy:
-    needs: [build, test]
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "Deploying the app..."
-
-
-   
+      - name: Run SonarQube Scan
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          ./sonar-scanner-5.0.1.3006-linux/bin/sonar-scanner \
+            -Dsonar.projectKey=safwana2 \
+            -Dsonar.sources=. \
+            -Dsonar.host.url=https://your-sonarqube-url \
+            -Dsonar.login=${SONAR_TOKEN}
