@@ -1,36 +1,20 @@
-name: SonarQube Scan with CLI Args
+name: CI with Linting & Tests
 
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+
+on: [push, pull_request]
+
+
 
 jobs:
-  sonar-analysis:
+  test:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - name: Install dependencies
+      - uses: actions/checkout@v3
+        run: npm install
 
-      - name: Install SonarScanner CLI
-        run: |
-          wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip
-          unzip sonar-scanner-cli-5.0.1.3006-linux.zip
-          export PATH="$PWD/sonar-scanner-5.0.1.3006-linux/bin:$PATH"
+      - name: Run ESLint
+        run: npm run lint
 
-      - name: Run SonarQube Scanner with Arguments
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: |
-          ./sonar-scanner-5.0.1.3006-linux/bin/sonar-scanner \
-            -Dsonar.projectKey=safwana2\
-            -Dsonar.projectName=safwana2 \
-            -Dsonar.projectVersion=1.0 \
-            -Dsonar.sources=. \
-            -Dsonar.inclusions=**/*.html,**/*.js,**/*.css \
-            -Dsonar.exclusions=**/node_modules/** \
-            -Dsonar.sourceEncoding=UTF-8 \
-            -Dsonar.host.url=https://your-sonarqube-url \
-            -Dsonar.login=${SONAR_TOKEN}
+      - name: Run Tests
+        run: npm test
