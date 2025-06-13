@@ -1,7 +1,9 @@
 name: CI with Linting & Tests
 
 
-on: [push, pull_request]
+on: 
+  push:
+    branches:["main"]
 
 
 
