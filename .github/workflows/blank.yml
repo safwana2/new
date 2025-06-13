@@ -1,22 +1,28 @@
-name: CI with Linting & Tests
-
-
-on:
-  push:
-    branches: ["main"]
-
-
+name : burhan
+on: 
+  - push 
+  - pull_request
 
 jobs:
-  test:
+  sonar:
     runs-on: ubuntu-latest
     steps:
-      - name: Install dependencies
-      - uses: actions/checkout@v3
-        run: npm install
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      - name: Run ESLint
-        run: npm run lint
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
 
-      - name: Run Tests
-        run: npm test
+      - name: Install Sonar Scanner
+        run: npm install -g sonarqube-scanner
+
+      - name: Run SonarQube Analysis
+        run: |
+          sonar-scanner \
+            -Dsonar.projectKey=safwana2 \
+            -Dsonar.organization=safwana2 \
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.token=${{ secrets.SONAR_TOKEN }}
